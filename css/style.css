@@ -1,0 +1,54 @@
+html,body {
+
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #f9fafc;
+      }
+
+      #map {
+
+        width: 70%;
+        float:right;
+
+      }
+
+  .loctations-list{
+    width:30%;
+    float:left;
+    margin-left: 1%;
+    margin-bottom: 2%;
+    cursor: context-menu;
+
+  }
+
+  .container{
+    width:100%;
+    height:100%;
+    display:flex;
+  }
+
+  ul {
+      list-style: none; /* Remove list bullets */
+      margin-left: 0;
+      padding: 0;
+  }
+  li {
+
+    border-bottom: 1px solid #ccc;
+    }
+  p{
+    padding-bottom: 5%;
+    font-size: 25px;
+
+    }
+
+    @media only screen and (max-width: 440px) {
+
+      .loctations-list{
+
+      
+
+      }
+
+    }
