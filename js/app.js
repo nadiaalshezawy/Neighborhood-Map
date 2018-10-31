@@ -12,7 +12,6 @@ function initMap() {
 		zoom: 10,
 		styles: styles,
 	});
-
 	// Style the markers a bit. This will be our listing marker icon.
 	var defaultIcon = makeMarkerIcon('3e5a87');
 	// Create a "highlighted location" marker color for when the user
@@ -35,31 +34,27 @@ function initMap() {
 		// Push the marker to our array of markers.
 		markers.push(marker);
 		// Create an onclick event to open the large infowindow at each marker.
-		marker.addListener('click', function () {
+		marker.addListener('click', function() {
 			FourSquareInfo(this);
 			this.setAnimation(google.maps.Animation.BOUNCE);
 			this.setAnimation(4);
 		});
 		// Two event listeners - one for mouseover, one for mouseout,
 		// to change the colors back and forth.
-		marker.addListener('mouseover', function () {
+		marker.addListener('mouseover', function() {
 			this.setIcon(highlightedIcon);
 		});
-		marker.addListener('mouseout', function () {
+		marker.addListener('mouseout', function() {
 			this.setIcon(defaultIcon);
 		});
 	}
 }
-
-//////////////////////////
-function MapError()
-{
+// function to handle error of map loading
+function MapError() {
 	alert("The map could not be loadded");
 }
-
 // This function will loop through the markers array and display filterMarker
 function FilteredListings(type) {
-
 	var bounds = new google.maps.LatLngBounds();
 	// Extend the boundaries of the map for each marker and display the marker
 	for (var i = 0; i < locations.length; i++) {
@@ -72,9 +67,7 @@ function FilteredListings(type) {
 		}
 	}
 	map.fitBounds(bounds);
-
 }
-
 // This function populates the infowindow form FourSquare API when the marker is clicked.
 function FourSquareInfo(marker) {
 	var client_id = "4N3RQBCJFJVZQDOYODEVNJ4XWLDP2PJPNYKVERHIAZYMKHQV";
@@ -90,15 +83,13 @@ function FourSquareInfo(marker) {
 	var url = "https://api.foursquare.com/v2/venues/search?client_id=" + client_id + "&client_secret=" + client_secret + "&v=20130815&ll=" + ll + "&query=" + query;
 	//call the fetch function
 	fetch(url) // Call the fetch function passing the url of the API as a parameter
-		.then(response => response.json())
-		.then(data => {
+		.then(response => response.json()).then(data => {
 			//get the id of venue
 			id = data.response.venues[0].id;
 			//second url to get rating and hours of venue
 			var url2 = "https://api.foursquare.com/v2/venues/" + id + "?client_id=" + client_id + "&client_secret=" + client_secret + "&v=20130815";
 			fetch(url2) // Call the fetch function passing the url of the API as a parameter
-				.then(response2 => response2.json())
-				.then(data2 => {
+				.then(response2 => response2.json()).then(data2 => {
 					//getting name, rating and hour of venue
 					name = data2.response.venue.name;
 					rating = data2.response.venue.rating;
@@ -106,38 +97,27 @@ function FourSquareInfo(marker) {
 					content = '<div>' + name + '</div>' + '<div>rating:' + rating + '</div>' + '<div>' + hours + '</div>';
 					infowindow.setContent(content);
 					infowindow.open(map, marker);
-				})
-				.catch((error) => {
+				}).catch((error) => {
 					//if error alert user and display title of marker
-          infowindow.setContent('<div>' + marker.title + '</div>');
-          infowindow.open(map, marker);
-          errormessage='There was an error '+error
-          alert(errormessage);
+					infowindow.setContent('<div>' + marker.title + '</div>');
+					infowindow.open(map, marker);
+					errormessage = 'There was an error ' + error
+					alert(errormessage);
 				});
-		})
-		.catch((error) => {
+		}).catch((error) => {
 			//alert the user if error getting api information and display title of marker
-      infowindow.setContent('<div>' + marker.title + '</div>');
-      infowindow.open(map, marker);
-      errormessage='There was an error '+error
-      alert('There was an error ',error);
-
+			infowindow.setContent('<div>' + marker.title + '</div>');
+			infowindow.open(map, marker);
+			errormessage = 'There was an error ' + error
+			alert('There was an error ', error);
 		});
-
 }
 //function that change marker color
 function makeMarkerIcon(markerColor) {
-	var markerImage = new google.maps.MarkerImage(
-		'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor +
-		'|40|_|%E2%80%A2',
-		new google.maps.Size(21, 34),
-		new google.maps.Point(0, 0),
-		new google.maps.Point(10, 34),
-		new google.maps.Size(21, 34));
+	var markerImage = new google.maps.MarkerImage('http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor + '|40|_|%E2%80%A2', new google.maps.Size(21, 34), new google.maps.Point(0, 0), new google.maps.Point(10, 34), new google.maps.Size(21, 34));
 	return markerImage;
 }
 //
-
 ///bouncing animation for clicking list
 function animateMarker(title1) {
 	for (var i = 0; i < markers.length; i++)
@@ -145,49 +125,39 @@ function animateMarker(title1) {
 			markers[i].setAnimation(google.maps.Animation.BOUNCE);
 			markers[i].setAnimation(4);
 		}
-
 }
 ///////////////////////////
 //location function
-var Location = function (data) {
-
+var Location = function(data) {
 	this.title = ko.observable(data.title);
-
 }
-
 ///view model
-var ViewModel = function () {
-
+var ViewModel = function() {
 	var self = this;
 	//knockout array for location List
 	this.LocationsList = ko.observableArray([]);
-	locations.forEach(function (LocationItem) {
+	locations.forEach(function(LocationItem) {
 		self.LocationsList.push(new Location(LocationItem));
 	});
-
 	//knockout array for categories
-	this.Categories = ko.observableArray([
-		'Shopping', 'Park', 'Attraction', 'All'
-	]);
+	this.Categories = ko.observableArray(['Shopping', 'Park', 'Attraction', 'All']);
 	this.selectedCategory = ko.observable();
-
 	//run when category selected
-	filterMarker = function () {
+	filterMarker = function() {
 		//alert(this.selectedCategory());
 		Category = this.selectedCategory();
 		FilteredListings(Category);
 		//update location list array to filtered
 		this.LocationsList([]);
-		locations.forEach(function (LocationItem) {
-			if (LocationItem.category == Category || Category == undefined || Category == 'All')
-				self.LocationsList.push(new Location(LocationItem));
+		locations.forEach(function(LocationItem) {
+			if (LocationItem.category == Category || Category == undefined || Category == 'All') self.LocationsList.push(new Location(LocationItem));
 		});
 	};
 	//if selected location from list animate bouncing
-	this.setLocation = function (clickedLocation) {
+	this.setLocation = function(clickedLocation) {
 		self.currentLocation(clickedLocation);
 		//find index of clicked location
-		index=self.LocationsList.indexOf(clickedLocation);
+		index = self.LocationsList.indexOf(clickedLocation);
 		animateMarker(self.currentLocation().title());
 		// pass the marker of same index for FourSquareInfo function
 		FourSquareInfo(markers[index]);
@@ -195,5 +165,4 @@ var ViewModel = function () {
 	//initialzing the current loctaion
 	this.currentLocation = ko.observable(this.LocationsList()[0]);
 }
-
 ko.applyBindings(new ViewModel());
