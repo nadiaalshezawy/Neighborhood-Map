@@ -1,46 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Dubai Tourist Map</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
-    <!-- header -->
-    <header >
-    <h1>Dubai Tourist Map</h1>
-    </header>
-  <div class="container">
-
-
-  <div class="loctations-list">
-    <div class="category">
-    <p>Category:
-          <select  data-bind = "
-          options: Categories,
-          value: selectedCategory,
-          event: {change: filterMarker},
-          optionsCaption: 'Choose Category...',
-          "></select></p>
-    </div>
-    <ul data-bind="foreach: LocationsList">
-    <li>
-        <b data-bind="text: title ,click: $parent.setLocation"></b>
-    </li>
-        <br>
-</ul>
-  </div>
-  <div id="map"> </div>
-  </div>
-  <script src="js/lib/knockout-3.2.0.js"></script>
-  <script src="js/mapStyle.js"></script>
-  <script src="js/locations.js"></script>
-  <script src="js/app.js"></script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfVwAja1nZ12ZTYDkU3OGf_sUGBm7e1To&v=3&callback=initMap">
-    </script>
-
-  </body>
+<head>
+	<meta charset="utf-8">
+	<title>Dubai Tourist Map</title>
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+	<!-- header -->
+	<header>
+		<h1>Dubai Tourist Map</h1>
+	</header>
+	<div class="container">
+		<div class="loctations-list">
+			<div class="category">
+				<p>Category: <select data-bind="options: Categories, value: selectedCategory, event: {change: filterMarker}, optionsCaption: 'Choose Category...',">
+				</select></p>
+			</div>
+			<ul data-bind="foreach: LocationsList">
+				<li><b data-bind="text: title ,click: $parent.setLocation"></b></li>
+				<li style="list-style: none"><br></li>
+			</ul>
+		</div>
+		<div id="map"></div>
+	</div>
+	<script src="js/lib/knockout-3.2.0.js">
+	</script>
+	<script src="js/mapStyle.js">
+	</script>
+	<script src="js/locations.js">
+	</script>
+	<script src="js/app.js">
+	</script>
+	<script async defer onerror="MapError()" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfVwAja1nZ12ZTYDkU3OGf_sUGBm7e1To&v=3&callback=initMap">
+	</script>
+</body>
 </html>

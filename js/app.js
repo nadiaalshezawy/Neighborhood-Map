@@ -18,7 +18,7 @@ function initMap() {
 	// Create a "highlighted location" marker color for when the user
 	// mouses over the marker.
 	var highlightedIcon = makeMarkerIcon('FFFF24');
-	var largeInfowindow = new google.maps.InfoWindow();
+	//var largeInfowindow = new google.maps.InfoWindow();
 	// The following group uses the location array to create an array of markers on initialize.
 	for (var i = 0; i < locations.length; i++) {
 		// Get the position from the location array.
@@ -36,7 +36,7 @@ function initMap() {
 		markers.push(marker);
 		// Create an onclick event to open the large infowindow at each marker.
 		marker.addListener('click', function () {
-			FourSquareInfo(this, largeInfowindow);
+			FourSquareInfo(this);
 			this.setAnimation(google.maps.Animation.BOUNCE);
 			this.setAnimation(4);
 		});
@@ -49,6 +49,12 @@ function initMap() {
 			this.setIcon(defaultIcon);
 		});
 	}
+}
+
+//////////////////////////
+function MapError()
+{
+	alert("The map could not be loadded");
 }
 
 // This function will loop through the markers array and display filterMarker
@@ -70,7 +76,7 @@ function FilteredListings(type) {
 }
 
 // This function populates the infowindow form FourSquare API when the marker is clicked.
-function FourSquareInfo(marker, infowindow) {
+function FourSquareInfo(marker) {
 	var client_id = "4N3RQBCJFJVZQDOYODEVNJ4XWLDP2PJPNYKVERHIAZYMKHQV";
 	var client_secret = "UC5SLFD50JPDEW1PJM44ZPMM3MSHXJGKJEEWA4ZVVWIAEKGJ";
 	//formatting the url
@@ -79,13 +85,13 @@ function FourSquareInfo(marker, infowindow) {
 	ll = (marker.position).toString();
 	ll = ll.replace("(", "");
 	ll = ll.replace(")", "");
+	var infowindow = new google.maps.InfoWindow();
 	//first url for getting venue id
 	var url = "https://api.foursquare.com/v2/venues/search?client_id=" + client_id + "&client_secret=" + client_secret + "&v=20130815&ll=" + ll + "&query=" + query;
 	//call the fetch function
 	fetch(url) // Call the fetch function passing the url of the API as a parameter
 		.then(response => response.json())
 		.then(data => {
-			console.log(data);
 			//get the id of venue
 			id = data.response.venues[0].id;
 			//second url to get rating and hours of venue
@@ -93,7 +99,6 @@ function FourSquareInfo(marker, infowindow) {
 			fetch(url2) // Call the fetch function passing the url of the API as a parameter
 				.then(response2 => response2.json())
 				.then(data2 => {
-					console.log(data2);
 					//getting name, rating and hour of venue
 					name = data2.response.venue.name;
 					rating = data2.response.venue.rating;
@@ -181,7 +186,11 @@ var ViewModel = function () {
 	//if selected location from list animate bouncing
 	this.setLocation = function (clickedLocation) {
 		self.currentLocation(clickedLocation);
+		//find index of clicked location
+		index=self.LocationsList.indexOf(clickedLocation);
 		animateMarker(self.currentLocation().title());
+		// pass the marker of same index for FourSquareInfo function
+		FourSquareInfo(markers[index]);
 	};
 	//initialzing the current loctaion
 	this.currentLocation = ko.observable(this.LocationsList()[0]);
