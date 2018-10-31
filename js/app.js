@@ -90,42 +90,32 @@ function FourSquareInfo(marker, infowindow) {
 			id = data.response.venues[0].id;
 			//second url to get rating and hours of venue
 			var url2 = "https://api.foursquare.com/v2/venues/" + id + "?client_id=" + client_id + "&client_secret=" + client_secret + "&v=20130815";
-			console.log(url2);
-
-			//infowindow.setContent('<div>' +id + '</div>');
-			//infowindow.open(map, marker);
 			fetch(url2) // Call the fetch function passing the url of the API as a parameter
 				.then(response2 => response2.json())
 				.then(data2 => {
-
 					console.log(data2);
 					//getting name, rating and hour of venue
 					name = data2.response.venue.name;
 					rating = data2.response.venue.rating;
 					hours = data2.response.venue.hours.status;
-					// id=data.response.venues[0].id;
-					// var url2="https://api.foursquare.com/v2/venues/"+id+"?client_id="+client_id+"&client_secret="+client_secret+"&v=20130815";
 					content = '<div>' + name + '</div>' + '<div>rating:' + rating + '</div>' + '<div>' + hours + '</div>';
-
-					console.log(data2.response.venue.name);
-
 					infowindow.setContent(content);
 					infowindow.open(map, marker);
-
 				})
 				.catch((error) => {
-					//alert the user if error getting api information
-					console.log('There was an error ', error);
-					alert('There was an error ');
-
+					//if error alert user and display title of marker
+          infowindow.setContent('<div>' + marker.title + '</div>');
+          infowindow.open(map, marker);
+          errormessage='There was an error '+error
+          alert(errormessage);
 				});
 		})
 		.catch((error) => {
-			//alert the user if error getting api information
-
-			info = "There was an error ";
-			infowindow.setContent('<div>' + info + '</div>');
-			infowindow.open(map, marker);
+			//alert the user if error getting api information and display title of marker
+      infowindow.setContent('<div>' + marker.title + '</div>');
+      infowindow.open(map, marker);
+      errormessage='There was an error '+error
+      alert('There was an error ',error);
 
 		});
 
